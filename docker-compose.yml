@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  jupyter-gpu:
+    image: pytorch/pytorch:2.6.0-cuda12.4-cudnn9-devel
+    container_name: concert-surveilance
+    ipc: host
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+    ports:
+      - "8888:8888"
+    volumes:
+      - .:/workspace # Memetakan folder project saat ini (termasuk requirements.txt) ke dalam container
+    working_dir: /workspace
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    command: >
+      bash -c "apt-get update && apt-get install -y libgl1 libglib2.0-0 libxcb1 libx11-xcb1 &&
+      if [ -f requirements.txt ]; then pip install --no-cache-dir -r requirements.txt; fi &&
+      pip install --no-cache-dir jupyterlab notebook &&
+      jupyter lab --ip=0.0.0.0 --port=8888 --no-browser --allow-root --NotebookApp.token='YOUR_SECURE_TOKEN'"
