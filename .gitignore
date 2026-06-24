@@ -5,3 +5,4 @@ runs/
 ops/
 videos/
 *.txt
+*.pyc
