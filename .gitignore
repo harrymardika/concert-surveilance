@@ -2,7 +2,6 @@ server.txt
 .env
 dataset/
 runs/
-ops/
 videos/
 *.txt
 *.pyc
